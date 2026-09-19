@@ -100,17 +100,13 @@
 </div>
 
 <script>
-    // CONFIGURATION
-    const GITHUB_USER = "Sarbeswarpanda04"; 
-    const REPO_NAME = "cdn-for-my-website"; // Spaces removed to match GitHub's actual clean slug formatting
-    const CDN_BASE_URL = "https://sarbeswarpanda.in";
-
     const explorerDiv = document.getElementById("explorer");
 
     // Helper function to build the tree recursively using GitHub API
     async function fetchRepoContents(path = "") {
-        // Fixed: pointing to api.github.com instead of github.com
-        const url = `https://github.com{GITHUB_USER}/${REPO_NAME}/contents/${path}`;
+        // Explicitly hardcoded endpoint parameters to completely bypass string substitution bugs
+        const url = `https://github.com{path}`;
+        
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Failed to fetch repository files.");
@@ -119,7 +115,6 @@
             const ul = document.createElement("ul");
             
             for (const item of items) {
-                // Ignore index.html itself so it doesn't show up in your asset list
                 if (item.name === "index.html") continue;
 
                 const li = document.createElement("li");
@@ -143,7 +138,7 @@
                     infoSpan.className = "file-info";
                     infoSpan.innerText = item.name;
                     
-                    const finalCdnUrl = `${CDN_BASE_URL}/${item.path}`;
+                    const finalCdnUrl = `https://sarbeswarpanda.in{item.path}`;
 
                     const btn = document.createElement("button");
                     btn.className = "copy-btn";
